@@ -19,4 +19,4 @@ A simple web application that recommends music playlists based on the user's moo
 - User history & personalization
 
 ## 🌐 Live Demo
-(Deploy on GitHub Pages)
+https://sambit1110.github.io/mood-music-recommender/
