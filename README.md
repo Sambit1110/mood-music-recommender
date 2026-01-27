@@ -36,7 +36,7 @@ This project is designed to demonstrate frontend development skills and basic re
 ---
 
 ## 🚀 Live Demo
-👉 https://your-username.github.io/mood-music-recommender/
+👉 https://sambit1110.github.io/mood-music-recommender/
 
 ---
 
