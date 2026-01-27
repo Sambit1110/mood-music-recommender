@@ -2,27 +2,44 @@ function recommendMusic() {
   const mood = document.getElementById("mood").value;
   const result = document.getElementById("result");
 
-  let recommendation = "";
+  let message = "";
+  let link = "";
 
   switch (mood) {
     case "happy":
-      recommendation = "🎶 Pop & Dance playlist to boost your happiness!";
+      message = "😊 Feeling happy? Enjoy this upbeat playlist!";
+      link = "https://open.spotify.com/playlist/37i9dQZF1DXdPec7aLTmlC";
       break;
+
     case "sad":
-      recommendation = "🎶 Soft Acoustic & Indie tracks for your mood.";
+      message = "😔 Here's a soothing playlist for your mood.";
+      link = "https://open.spotify.com/playlist/37i9dQZF1DX7qK8ma5wgG1";
       break;
+
     case "angry":
-      recommendation = "🎶 Rock & Metal music to release stress.";
+      message = "😡 Let it out with some powerful tracks!";
+      link = "https://open.spotify.com/playlist/37i9dQZF1DWYxwmBaMqxsl";
       break;
+
     case "relaxed":
-      recommendation = "🎶 Lo-Fi & Jazz for relaxation.";
+      message = "😌 Time to relax with lo-fi & chill vibes.";
+      link = "https://open.spotify.com/playlist/37i9dQZF1DX4sWSpwq3LiO";
       break;
+
     case "energetic":
-      recommendation = "🎶 EDM & Workout tracks to keep you moving!";
+      message = "⚡ Boost your energy with this playlist!";
+      link = "https://open.spotify.com/playlist/37i9dQZF1DX8FwnYE6PRvL";
       break;
+
     default:
-      recommendation = "⚠️ Please select a mood!";
+      result.innerHTML = "⚠️ Please select a mood!";
+      return;
   }
 
-  result.innerText = recommendation;
+  result.innerHTML = `
+    <p>${message}</p>
+    <a href="${link}" target="_blank" class="spotify-btn">
+      🎵 Open on Spotify
+    </a>
+  `;
 }
