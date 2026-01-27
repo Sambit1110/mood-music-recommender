@@ -44,9 +44,19 @@ This project is designed to demonstrate frontend development skills and basic re
 mood-music-recommender/
 │
 ├── index.html
-├── style.css
-├── script.js
-└── README.md
+│
+├── assets/
+│   ├── css/
+│   │   └── style.css
+│   │
+│   └── js/
+│       └── script.js
+│
+├── screenshots/
+│   └── preview.png   (optional)
+│
+├── README.md
+└── LICENSE           (optional)
 
 
 ---
