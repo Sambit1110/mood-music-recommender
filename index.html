@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mood-Based Music Recommender</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="container">
+    <h1>🎧 Mood-Based Music Recommender</h1>
+    <p>Select your mood and get music recommendations</p>
+
+    <select id="mood">
+      <option value="">-- Select Mood --</option>
+      <option value="happy">😊 Happy</option>
+      <option value="sad">😔 Sad</option>
+      <option value="angry">😡 Angry</option>
+      <option value="relaxed">😌 Relaxed</option>
+      <option value="energetic">⚡ Energetic</option>
+    </select>
+
+    <button onclick="recommendMusic()">Recommend Music</button>
+
+    <div id="result"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
