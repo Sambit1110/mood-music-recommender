@@ -1,30 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Mood-Based Music Recommender</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mood Music · Music for how you feel</title>
+  <meta name="description" content="Pick, map, describe or show your mood and get real Spotify playlists that play right on the page." />
+  <meta name="theme-color" content="#7b5cff" />
+  <meta property="og:title" content="Mood Music" />
+  <meta property="og:description" content="Music for how you feel. Pick a mood, describe your day, or let your face decide." />
+  <meta property="og:image" content="https://sambit1110.github.io/mood-music-recommender/screenshots/desktop.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Unbounded:wght@500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎧</text></svg>" />
 </head>
-<body>
+<body data-mood="none">
+  <div class="backdrop" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span><span class="grain"></span></div>
 
-  <div class="container">
-    <h1>🎧 Mood-Based Music Recommender</h1>
-    <p>Select your mood and get music recommendations</p>
+  <header class="top">
+    <a class="brand" href="./" aria-label="Mood Music home"><span class="brand-mark" aria-hidden="true">🎧</span><span>mood<b>/</b>music</span></a>
+    <nav class="top-links" aria-label="Sections">
+      <a href="#saved">Saved</a>
+      <a href="https://github.com/Sambit1110/mood-music-recommender" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+    </nav>
+  </header>
 
-    <select id="mood">
-      <option value="">-- Select Mood --</option>
-      <option value="happy">😊 Happy</option>
-      <option value="sad">😔 Sad</option>
-      <option value="angry">😡 Angry</option>
-      <option value="relaxed">😌 Relaxed</option>
-      <option value="energetic">⚡ Energetic</option>
-    </select>
+  <main>
+    <!-- hero -->
+    <section class="hero">
+      <p class="eyebrow">Music for how you feel</p>
+      <h1 class="hero-title"><span id="heroLead">How are you</span><br /><span id="heroMood">feeling?</span></h1>
+      <div class="hints">
+        <button id="timeHint" class="hint-chip" type="button"></button>
+        <button id="weatherBtn" class="hint-chip ghost" type="button" title="Uses your approximate location once, via Open-Meteo">☁️ Match my weather</button>
+      </div>
+      <p id="hintStatus" class="hint-status" role="status"></p>
+    </section>
 
-    <button onclick="recommendMusic()">Recommend Music</button>
+    <!-- input methods -->
+    <section class="card picker" aria-label="Choose your mood">
+      <div class="tabs" role="tablist" aria-label="Ways to choose">
+        <button class="tab" role="tab" id="tab-pick" aria-controls="panel-pick" aria-selected="true" type="button"><span aria-hidden="true">🎭</span> Pick</button>
+        <button class="tab" role="tab" id="tab-map" aria-controls="panel-map" aria-selected="false" tabindex="-1" type="button"><span aria-hidden="true">🧭</span> Mood map</button>
+        <button class="tab" role="tab" id="tab-text" aria-controls="panel-text" aria-selected="false" tabindex="-1" type="button"><span aria-hidden="true">✍️</span> Describe</button>
+        <button class="tab" role="tab" id="tab-cam" aria-controls="panel-cam" aria-selected="false" tabindex="-1" type="button"><span aria-hidden="true">📷</span> Camera</button>
+      </div>
 
-    <div id="result"></div>
-  </div>
+      <div class="panel" role="tabpanel" id="panel-pick" aria-labelledby="tab-pick">
+        <div id="moodGrid" class="mood-grid" role="radiogroup" aria-label="Moods"></div>
+      </div>
 
-  <script src="script.js"></script>
+      <div class="panel" role="tabpanel" id="panel-map" aria-labelledby="tab-map" hidden>
+        <p class="panel-intro">Drag the dot. Left is down, right is up; bottom is calm, top is full of energy.</p>
+        <div class="map-wrap">
+          <div id="moodMap" class="mood-map" role="slider" tabindex="0" aria-label="Mood map. Use arrow keys to move." aria-valuetext="">
+            <span class="axis ax-top">Energetic</span><span class="axis ax-bottom">Calm</span>
+            <span class="axis ax-left">Down</span><span class="axis ax-right">Up</span>
+            <span id="puck" class="puck" aria-hidden="true"></span>
+          </div>
+          <div class="map-readout">
+            <span class="readout-label">You're feeling</span>
+            <strong id="mapMood">—</strong>
+            <button id="mapGo" class="btn" type="button">Play this mood <span aria-hidden="true">→</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" role="tabpanel" id="panel-text" aria-labelledby="tab-text" hidden>
+        <label for="dayText" class="panel-intro">Tell us about your day in a sentence or two. It's read only on your device.</label>
+        <textarea id="dayText" rows="3" maxlength="500" placeholder="e.g. exams tomorrow and I'm so stressed…"></textarea>
+        <div class="text-row">
+          <div class="examples" aria-label="Try an example">
+            <button class="example" type="button">Just got the job!! 🎉</button>
+            <button class="example" type="button">Rainy day, missing home…</button>
+            <button class="example" type="button">So tired, can't sleep</button>
+          </div>
+          <button id="textGo" class="btn" type="button">Find my music <span aria-hidden="true">→</span></button>
+        </div>
+        <p id="textResult" class="detect-note" role="status"></p>
+      </div>
+
+      <div class="panel" role="tabpanel" id="panel-cam" aria-labelledby="tab-cam" hidden>
+        <div class="cam-layout">
+          <div class="cam-frame"><video id="camVideo" playsinline muted aria-label="Camera preview"></video><span class="cam-placeholder" aria-hidden="true">📷</span></div>
+          <div>
+            <p class="panel-intro">Let your face pick the music. A small model reads your expression for about 2 seconds, <strong>entirely on your device</strong>. No image is uploaded, and the camera switches off straight after.</p>
+            <button id="camGo" class="btn" type="button">Read my mood <span aria-hidden="true">→</span></button>
+            <p id="camStatus" class="detect-note" role="status"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- result -->
+    <section id="result" class="result" hidden aria-live="polite">
+      <div class="result-head">
+        <span id="rEmoji" class="r-emoji" aria-hidden="true"></span>
+        <div>
+          <p class="eyebrow" id="rSource">Your mood</p>
+          <h2 id="rTitle" class="r-title"></h2>
+          <p id="rLine" class="r-line"></p>
+        </div>
+      </div>
+      <div class="card player-card">
+        <div class="playlist-bar">
+          <div id="playlistPills" class="pills" role="radiogroup" aria-label="Playlists for this mood"></div>
+          <div class="actions">
+            <button id="shuffleBtn" class="icon-btn" type="button" aria-label="Shuffle to another playlist" title="Shuffle">🔀</button>
+            <button id="favBtn" class="icon-btn" type="button" aria-pressed="false" aria-label="Save this playlist" title="Save">♡</button>
+            <button id="shareBtn" class="icon-btn" type="button" aria-label="Copy a share link" title="Share">🔗</button>
+            <a id="openBtn" class="btn spotify" href="#" target="_blank" rel="noopener noreferrer">Open in Spotify</a>
+          </div>
+        </div>
+        <div class="embed-wrap">
+          <iframe id="player" title="Spotify playlist player" src="about:blank" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+        </div>
+        <p class="embed-note">Logged out of Spotify? You'll hear 30-second previews. Log in on spotify.com in this browser for full tracks.</p>
+        <p id="toast" class="toast" role="status"></p>
+      </div>
+    </section>
+
+    <!-- saved -->
+    <section id="saved" class="saved" aria-labelledby="savedTitle">
+      <h2 id="savedTitle" class="section-title">Your saved vibes</h2>
+      <div id="favList" class="fav-list"></div>
+      <p id="favEmpty" class="empty">Tap ♡ on any playlist to save it here.</p>
+      <h3 class="sub-title">Recently played moods</h3>
+      <div id="recentList" class="recent-list"></div>
+      <p id="recentEmpty" class="empty">Nothing yet. Pick a mood above.</p>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>Playlists by <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer">Spotify</a> · Weather by <a href="https://open-meteo.com" target="_blank" rel="noopener noreferrer">Open-Meteo</a> · Face model by <a href="https://github.com/vladmandic/face-api" target="_blank" rel="noopener noreferrer">face-api</a></p>
+    <p>Made by <a href="https://github.com/Sambit1110" target="_blank" rel="noopener noreferrer">@Sambit1110</a> · <a href="https://github.com/Sambit1110/mood-music-recommender" target="_blank" rel="noopener noreferrer">Source</a> · MIT License</p>
+  </footer>
+
+  <script type="module" src="js/app.js"></script>
 </body>
 </html>
